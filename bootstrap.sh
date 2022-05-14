@@ -9,19 +9,43 @@
 #   curl https://raw.githubusercontent.com/cryptopool-builders/Multi-Pool-Installer/master/bootstrap.sh | bash
 #
 #########################################################
+if [ -z "${TAG}" ]; then
+	TAG=v2.56
+fi
 
 
 # Clone the MultiPool repository if it doesn't exist.
+if [ ! -d $HOME/multipool ]; then
+	if [ ! -f /usr/bin/git ]; then
+		echo Installing git . . .
+		apt-get -q -q update
+		DEBIAN_FRONTEND=noninteractive apt-get -q -q install -y git < /dev/null
+		echo
+	fi
 
-echo Installing git . . .
-apt-get -q -q update
-apt-get -q -q install -y git < /dev/null
-echo
+	echo Downloading MultiPool Installer v0.1. . .
+	git clone \
+		https://github.com/lucasribeirop/multipool_setup \
+		"$HOME"/multipool/install \
+		< /dev/null 2> /dev/null
 
-echo Downloading MultiPool Installer v1.0. . .
-git clone https://github.com/lucasribeirop/multipool_setup "$HOME"/multipool install < /dev/null 2> /dev/null
-echo
+	echo
+fi
 
+# Set permission and change directory to it.
+cd $HOME/multipool/install
+
+# Update it.
+#sudo chown -R $USER $HOME/multipool/install/.git/
+#if [ "${TAG}" != `git describe --tags` ]; then
+#	echo Updating MultiPool Installer to ${TAG} . . .
+#	git fetch --depth 1 --force --prune origin tag ${TAG}
+#	if ! git checkout -q ${TAG}; then
+#		echo "Update failed. Did you modify something in `pwd`?"
+#		exit
+#	fi
+#	echo
+#fi
 
 # Start setup script.
 bash $HOME/multipool/install/start.sh
