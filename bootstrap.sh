@@ -20,6 +20,7 @@ echo
 
 echo Downloading MultiPool Installer v1.0. . .
 git clone https://github.com/lucasribeirop/multipool_setup "$HOME"/multipool install < /dev/null 2> /dev/null
+echo
 
 
 # Start setup script.
